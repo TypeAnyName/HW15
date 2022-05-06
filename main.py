@@ -28,20 +28,23 @@ def main():
                 LEFT JOIN outcome_subtypes ON animals_new.outcome_subtypes_id = outcome_subtypes.id
                 WHERE animals_new.id == "{animal_id}"
         """
-        response = db_connect(query)[0]
-        response_json = {
-            "age": response[0],
-            "specie": response[1],
-            "name": response[2],
-            "color": response[3],
-            "breed": response[4],
-            "birthday": response[5],
-            "outcome_subtype": response[6],
-            "outcome_type": response[7],
-            "outcome_month": response[8],
-            "outcome_year": response[9]
-        }
-        return jsonify(response_json)
+        try:
+            response = db_connect(query)[0]
+            response_json = {
+                "age": response[0],
+                "specie": response[1],
+                "name": response[2],
+                "color": response[3],
+                "breed": response[4],
+                "birthday": response[5],
+                "outcome_subtype": response[6],
+                "outcome_type": response[7],
+                "outcome_month": response[8],
+                "outcome_year": response[9]
+            }
+            return jsonify(response_json)
+        except IndexError:
+            return "Животное с таким id не найдено"
 
     app.run()
 
