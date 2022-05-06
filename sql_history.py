@@ -118,9 +118,10 @@ def main():
      INNER JOIN types ON types.type = animals.animal_type
      INNER JOIN color ON color.color = animals.color1
      INNER JOIN breeds ON breeds.breed = animals.breed
-     INNER JOIN outcome_subtypes ON outcome_subtypes.outcome_subtype = animals.outcome_subtype
+     LEFT JOIN outcome_subtypes ON outcome_subtypes.outcome_subtype = animals.outcome_subtype
      INNER JOIN outcome_types ON outcome_types.outcome_type = animals.outcome_type
     """
+
 
 if __name__ == "__main__":
     main()
