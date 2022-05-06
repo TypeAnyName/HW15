@@ -82,7 +82,8 @@ def main():
     date_of_birth       DATE,
     outcome_subtypes_id INTEGER,
     outcome_types_id    INTEGER,
-    outcome_date        DATE,
+    outcome_month       INTEGER,
+    outcome_year        INTEGER,
     FOREIGN KEY (animal_type_id) REFERENCES types (id),
     FOREIGN KEY (breed_id) REFERENCES breeds (id),
     FOREIGN KEY (outcome_subtypes_id) REFERENCES outcome_subtypes (id),
@@ -91,92 +92,35 @@ def main():
 )
     """
     query_12 = """
+    INSERT INTO animals_new (age_upon_outcome,
+                         animal_id,
+                         animal_type_id,
+                         "name",
+                         color_id,
+                         breed_id,
+                         date_of_birth,
+                         outcome_subtypes_id,
+                         outcome_types_id,
+                         outcome_month,
+                         outcome_year)
+     SELECT animals.age_upon_outcome,
+            animals.animal_id,
+            main.types.id,
+            animals.name,
+            main.color.id,
+            main.breeds.id,
+            animals.date_of_birth,
+            main.outcome_subtypes.id,
+            main.outcome_types.id,
+            animals.outcome_month,
+            animals.outcome_year
+     FROM animals
+     INNER JOIN types ON types.type = animals.animal_type
+     INNER JOIN color ON color.color = animals.color1
+     INNER JOIN breeds ON breeds.breed = animals.breed
+     INNER JOIN outcome_subtypes ON outcome_subtypes.outcome_subtype = animals.outcome_subtype
+     INNER JOIN outcome_types ON outcome_types.outcome_type = animals.outcome_type
     """
-
-
-
-
-
-
-    query = """
-                   CREATE TABLE IF NOT EXISTS animals_colors(
-                   animals_id INTEGER 
-                   , colors_id INTEGER
-                   , FOREIGN KEY (animals_id) REFERENCES animals("index")
-                   , FOREIGN KEY (colors_id) REFERENCES colors(id) 
-                   ) 
-    """
-    # print(db_connect(query_2))
-
-    query_3 = """
-              INSERT INTO colors (color)
-              SELECT DISTINCT * FROM (
-                  SELECT DISTINCT 
-                      color1 as color
-                  FROM animals
-                  UNION ALL
-                  SELECT DISTINCT 
-                       color2 as color
-                  FROM animals
-              )
-    """
-    # print(db_connect(query_3))
-
-    query = """
-               DELETE FROM colors WHERE color IS NULL 
-    """
-    # print(db_connect(query_4))
-
-    query = """
-              INSERT INTO animals_colors (animals_id, colors_id)
-              SELECT DISTINCT animals."index", colors.id
-              FROM animals
-              INNER JOIN colors ON colors.color = animals.color1
-              UNION ALL 
-              SELECT DISTINCT animals."index", colors.id
-              FROM animals
-              INNER JOIN colors ON colors.color = animals.color2
-    """
-    # print(db_connect(query_5))
-
-    query = """
-              CREATE TABLE IF NOT EXISTS outcome(
-                  id INTEGER PRIMARY KEY AUTOINCREMENT
-                  , subtype VARCHAR (50)
-                  , "type" VARCHAR (50)
-                  , "month" INTEGER 
-                  , "year" INTEGER
-              )
-                  
-    """
-    # print(db_connect(query_6))
-
-    query = """
-              INSERT INTO outcome (subtype, "type", "month", "year")
-              SELECT DISTINCT 
-                   animals.outcome_subtype
-                   , animals.outcome_type
-                   , animals.outcome_month
-                   , animals.outcome_year
-              FROM animals
-    """
-    # print(db_connect(query_7))
-
-    query = """
-              CREATE TABLE IF NOT EXISTS Animal_new (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT
-                    , age_upon_outcome VARCHAR (50)
-                    , animal_id VARCHAR (50)
-                    , animal_type VARCHAR (50)
-                    , "name" VARCHAR (50)
-                    , breed VARCHAR (50)
-                    , date_of_birth DATE 
-                    , outcome_id INTEGER 
-                    , FOREIGN KEY 
-                    
-              
-    """
-
 
 if __name__ == "__main__":
     main()
